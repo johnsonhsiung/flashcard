@@ -62,7 +62,8 @@ export default function Generate() {
   };
 
   const saveFlashcards = async () => {
-    if (!name) {
+    const trimmedName = name.trim() 
+    if (!trimmedName) {
       alert("Please enter a name");
       return;
     }
@@ -73,17 +74,17 @@ export default function Generate() {
     if (docSnap.exists()) {
       const collections = docSnap.data().flashcards || [];
 
-      if (collections.find((f) => f.name == name)) {
+      if (collections.find((f) => f.name == trimmedName)) {
         alert("Flashcard collection with the name already exists!");
       } else {
-        collections.push({ name });
+        collections.push({ name: trimmedName });
         batch.set(userDocRef, { flashcards: collections }, { merge: true });
       }
     } else {
-      batch.set(userDocRef, { flashcards: [{ name }] });
+      batch.set(userDocRef, { flashcards: [{ name: trimmedName }] });
     }
 
-    const colRef = collection(userDocRef, name);
+    const colRef = collection(userDocRef, trimmedName);
     flashcards.forEach((flashcard) => {
       const cardDocRef = doc(colRef);
       batch.set(cardDocRef, flashcard);

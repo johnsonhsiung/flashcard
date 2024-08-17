@@ -35,7 +35,7 @@ export default function FlashCard() {
 
   useEffect(() => {
     async function getFlashcard() {
-      if (!user) return;
+      if (!user || !search) return;
       const docRef = collection(doc(collection(db, "users"), user.id), search);
       const docs = await getDocs(docRef);
       const flashcards = [];
