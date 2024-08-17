@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import getStripe from "@/utils/get-stripe";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   Button,
   Toolbar,
@@ -14,6 +13,7 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import Link from "next/link";
+import HeaderBar from "@/components/HeaderBar";
 
 export default function Home() {
   const handleSubmit = async () => {
@@ -47,26 +47,7 @@ export default function Home() {
         <meta name="descrption" content="Create flashcards from your text" />
       </Head>
 
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            <Link style={{ textDecoration: "none", color: "white" }} href="#">
-              Flashcards SaaS
-            </Link>
-          </Typography>
-          <SignedOut>
-            <Button color="inherit" href="sign-in">
-              Login
-            </Button>
-            <Button color="inherit" href="sign-up">
-              Sign Up
-            </Button>
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </Toolbar>
-      </AppBar>
+
       <Box sx={{ textAlign: "center", my: 4 }}>
         <Typography variant="h2" gutterBottom>
           Welcome to Flashcard SaaS
