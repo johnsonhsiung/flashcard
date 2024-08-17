@@ -1,6 +1,8 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import { db } from "@/firebase";
+
 import {
   CardActionArea,
   CardContent,
@@ -74,7 +76,7 @@ export default function Generate() {
       if (collections.find((f) => f.name == name)) {
         alert("Flashcard collection with the name already exists!");
       } else {
-        collections.push(name);
+        collections.push({ name });
         batch.set(userDocRef, { flashcards: collections }, { merge: true });
       }
     } else {
