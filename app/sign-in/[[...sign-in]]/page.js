@@ -11,32 +11,17 @@ import {
 
 export default function SignUpPage() {
   return (
-    <Container maxWidth="100vw">
-      <AppBar position="static" sx={{ backgroundColor: "#3F41b5" }}>
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            <Link style={{ textDecoration: "none", color: "white" }} href="/">
-              Flashcards SaaS
-            </Link>
-          </Typography>
-          <Button color="inherit">
-            <Link href="/sign-in">Login</Link>
-          </Button>
-          <Button color="inherit">
-            <Link href="/sign-up">Sign Up</Link>
-          </Button>
-        </Toolbar>
-      </AppBar>
-
       <Box
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
+        height="100vh"
+        width="100vw"
       >
-        <Typography variant="h4">Sign In</Typography>
+        <Typography variant="h4" padding={6}>Sign In</Typography>
         <SignIn />
       </Box>
-    </Container>
+
   );
 }

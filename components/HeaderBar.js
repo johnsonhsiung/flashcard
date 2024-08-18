@@ -15,7 +15,7 @@ export default function HeaderBar() {
         <AppBar position="static">
     <Toolbar>
     <Typography variant="h6" style={{ flexGrow: 1 }}>
-        <Link style={{ textDecoration: "none", color: "white" }} href="#">
+        <Link style={{ textDecoration: "none", color: "white" }} href="/">
         Flashcards SaaS
         </Link>
     </Typography>
@@ -28,7 +28,11 @@ export default function HeaderBar() {
         </Button>
     </SignedOut>
     <SignedIn>
-        <UserButton />
+        <Link style={{ textDecoration: "none", color: "white", marginRight: "16px"}} href="/flashcards">
+            Saved 
+        </Link>
+    <UserButton />
+
     </SignedIn>
     </Toolbar>
     </AppBar>

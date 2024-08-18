@@ -40,6 +40,10 @@ export default function Generate() {
   const router = useRouter();
 
   const handleSubmit = async () => {
+    if (!text) {
+      alert("Please provide a prompt to generate flashcards!")
+      return
+    }
     fetch("api/generate", {
       method: "POST",
       body: text,
@@ -62,6 +66,10 @@ export default function Generate() {
   };
 
   const saveFlashcards = async () => {
+    if (!user) {
+      alert("Please login or signup to save your flashcards!")
+      return
+    }
     const trimmedName = name.trim() 
     if (!trimmedName) {
       alert("Please enter a name");
