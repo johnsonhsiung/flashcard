@@ -43,8 +43,9 @@ export default function Generate() {
   const [open, setOpen] = useState(false);
   const [promptError, setPromptError] = useState(false);
   const [collectionNameError, setCollectionNameError] = useState(false);
-  const [signedInError, setSignedInError] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [signedInError, setSignedInError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [emptyFlashcardsError, setEmptyFlashcardsError] = useState(false);
 
   const router = useRouter();
 
@@ -59,13 +60,17 @@ export default function Generate() {
       method: "POST",
       body: text,
     })
-      .then((res) => {
-        setLoading(false);
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        setFlashcards(data);
+        if (data.error) {
+          setEmptyFlashcardsError(true); 
+          console.log('empty flashcard')
+        } else {
+          setFlashcards(data);
+          setEmptyFlashcardsError(false)
+        }
         setLoading(false);
+
       });
   };
 
@@ -141,8 +146,10 @@ export default function Generate() {
           <TextField
             value={text}
             onChange={(e) => {
-              if (promptError) setPromptError(false)
-              setText(e.target.value)}}
+              if (promptError) setPromptError(false);
+              if (emptyFlashcardsError) setEmptyFlashcardsError(false);
+              setText(e.target.value);
+            }}
             label="Enter text"
             fullWidth
             multiline
@@ -152,6 +159,9 @@ export default function Generate() {
           ></TextField>
           {promptError && (
             <Alert severity="error" sx={{mb: 2}}>Please enter a prompt before generating.</Alert>
+          )}
+          {emptyFlashcardsError && (
+            <Alert severity='error' sx={{mb: 2}}>Error generating flashcards. Please make sure the prompt is clear.</Alert>
           )}
           <Button
             variant="contained"
