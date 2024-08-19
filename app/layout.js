@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import HeaderBar from "@/components/HeaderBar";
+import theme from "./theme";  // Import your custom theme
+import { ThemeProvider, CssBaseline } from "@mui/material";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,9 +15,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}><HeaderBar/>{children}</body>
-      </html>
+      <ThemeProvider theme={theme}>
+        <html lang="en">
+          <CssBaseline />
+          <body className={inter.className}>
+            <HeaderBar />
+            {children}
+          </body>
+        </html>
+      </ThemeProvider>
     </ClerkProvider>
 
   );
