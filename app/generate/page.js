@@ -32,6 +32,8 @@ import {
 } from "firebase/firestore";
 
 import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Link from "next/link";
 
 
 export default function Generate() {
@@ -46,6 +48,8 @@ export default function Generate() {
   const [signedInError, setSignedInError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [emptyFlashcardsError, setEmptyFlashcardsError] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+
 
   const router = useRouter();
 
@@ -88,6 +92,12 @@ export default function Generate() {
     setSignedInError(false)
     setOpen(false);
   };
+  const handleSuccessOpen = () => {
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
 
   
 
@@ -126,7 +136,8 @@ export default function Generate() {
 
     await batch.commit();
     handleClose();
-    router.push("/flashcards");
+    handleSuccessOpen();    
+    //router.push("/flashcards");
   };
 
   return (
@@ -239,7 +250,7 @@ export default function Generate() {
             ))}
           </Grid>
           <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-            <Button variant="contined" colors="secondary" onClick={handleOpen}>
+            <Button variant="contained" colors="secondary" onClick={handleOpen}>
               Save
             </Button>
           </Box>
@@ -275,6 +286,25 @@ export default function Generate() {
           </DialogActions>
         </DialogContent>
       </Dialog>
+      <Snackbar open={successOpen} autoHideDuration={10000} onClose={handleSuccessClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+        <Alert
+          onClose={handleSuccessClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          Flashcard collection saved! Navigate to&nbsp;  
+          <Typography component='span' sx={{color:'white'}}>
+            <Link href='/flashcards' sx={{            
+              textDecoration: 'underline',
+            }}>
+              Saved
+            </Link>
+
+          </Typography>
+
+          &nbsp;to view it. 
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
