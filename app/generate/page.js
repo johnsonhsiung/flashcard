@@ -30,6 +30,9 @@ import {
   writeBatch,
 } from "firebase/firestore";
 
+import Alert from '@mui/material/Alert';
+
+
 export default function Generate() {
   const { isLoaded, isSignedin, user } = useUser();
   const [flashcards, setFlashcards] = useState([]);
@@ -37,11 +40,13 @@ export default function Generate() {
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const router = useRouter();
 
+
   const handleSubmit = async () => {
-    if (!text) {
-      alert("Please provide a prompt to generate flashcards!")
+    if (!text.trim()) {
+      setError(true)
       return
     }
     fetch("api/generate", {
@@ -64,6 +69,8 @@ export default function Generate() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  
 
   const saveFlashcards = async () => {
     if (!user) {
@@ -119,7 +126,9 @@ export default function Generate() {
         <Paper sx={{ p: 4, width: "100%" }}>
           <TextField
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              if (error) setError(false)
+              setText(e.target.value)}}
             label="Enter text"
             fullWidth
             multiline
@@ -127,6 +136,9 @@ export default function Generate() {
             variant="outlined"
             sx={{ mb: 2 }}
           ></TextField>
+          {error && (
+            <Alert severity="error" sx={{mb: 2}}>Please enter a prompt before generating.</Alert>
+          )}
           <Button
             variant="contained"
             color="primary"
