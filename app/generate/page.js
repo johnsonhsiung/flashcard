@@ -49,6 +49,7 @@ export default function Generate() {
   const [loading, setLoading] = useState(false);
   const [emptyFlashcardsError, setEmptyFlashcardsError] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
+  const [sameNameError, setSameNameError] = useState(false);
 
 
   const router = useRouter();
@@ -98,9 +99,14 @@ export default function Generate() {
   const handleSuccessClose = () => {
     setSuccessOpen(false);
   };
+  const handleSameNameOpen = () => {
+    setSameNameError(true);
+  }
+  const handleSameNameClose = () => {
+    setSameNameError(false);
+  }
 
   
-
   const saveFlashcards = async () => {
     if (!user) {
       setSignedInError(true);
@@ -119,7 +125,8 @@ export default function Generate() {
       const collections = docSnap.data().flashcards || [];
 
       if (collections.find((f) => f.name == trimmedName)) {
-        alert("Flashcard collection with the name already exists!");
+        handleSameNameOpen()
+        return; 
       } else {
         collections.push({ name: trimmedName });
         batch.set(userDocRef, { flashcards: collections }, { merge: true });
@@ -270,10 +277,16 @@ export default function Generate() {
             fullWidth
             value={name}
             onChange={(e) => {
+              if (sameNameError) handleSameNameClose()
               if (collectionNameError) setCollectionNameError(false)
-              setName(e.target.value)}}
+              setName(e.target.value);}}
             variant="outlined"
           ></TextField>
+          {sameNameError && (
+            <Alert severity="error">Duplicate name. Please choose a different name.</Alert>
+          )
+
+          }
           {collectionNameError && (
             <Alert severity="error">Please enter a collection name.</Alert>
           )}

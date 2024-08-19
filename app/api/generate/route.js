@@ -15,9 +15,9 @@ Organize the content logically.
 Keep the backside of the flashcards short to no more than 10 words.
 Do not restate the frontside on the backside. 
 
-If the prompt is not understandable, unsafe, or is not relevant to your role a flashcard-creating chabot, return { flashcards: [] }.
+If the prompt is not understandable or unsafe, return { flashcards: [] }.
 
-Otherwise, return the flashcards in JSON format 
+Otherwise, if the prompt contains a subject, return the flashcards in JSON format 
 {
     "flashcards" : [
         "front" : str,
