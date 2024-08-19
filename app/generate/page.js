@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { db } from "@/firebase";
+import LinearIndeterminate from "@/components/LinearIndeterminate";
 
 import {
   CardActionArea,
@@ -40,21 +41,32 @@ export default function Generate() {
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState(false);
+  const [promptError, setPromptError] = useState(false);
+  const [collectionNameError, setCollectionNameError] = useState(false);
+  const [signedInError, setSignedInError] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const router = useRouter();
 
 
   const handleSubmit = async () => {
     if (!text.trim()) {
-      setError(true)
+      setPromptError(true)
       return
     }
+    setLoading(true)
     fetch("api/generate", {
       method: "POST",
       body: text,
     })
-      .then((res) => res.json())
-      .then((data) => setFlashcards(data));
+      .then((res) => {
+        setLoading(false);
+        return res.json();
+      })
+      .then((data) => {
+        setFlashcards(data);
+        setLoading(false);
+      });
   };
 
   const handleCardClick = (id) => {
@@ -67,6 +79,8 @@ export default function Generate() {
     setOpen(true);
   };
   const handleClose = () => {
+    setCollectionNameError(false)
+    setSignedInError(false)
     setOpen(false);
   };
 
@@ -74,12 +88,12 @@ export default function Generate() {
 
   const saveFlashcards = async () => {
     if (!user) {
-      alert("Please login or signup to save your flashcards!")
-      return
+      setSignedInError(true);
+      return;
     }
     const trimmedName = name.trim() 
     if (!trimmedName) {
-      alert("Please enter a name");
+      setCollectionNameError(true);
       return;
     }
     const batch = writeBatch(db);
@@ -127,7 +141,7 @@ export default function Generate() {
           <TextField
             value={text}
             onChange={(e) => {
-              if (error) setError(false)
+              if (promptError) setPromptError(false)
               setText(e.target.value)}}
             label="Enter text"
             fullWidth
@@ -136,7 +150,7 @@ export default function Generate() {
             variant="outlined"
             sx={{ mb: 2 }}
           ></TextField>
-          {error && (
+          {promptError && (
             <Alert severity="error" sx={{mb: 2}}>Please enter a prompt before generating.</Alert>
           )}
           <Button
@@ -149,6 +163,9 @@ export default function Generate() {
           </Button>
         </Paper>
       </Box>
+      {loading && (
+            <LinearIndeterminate/>
+      )}
       {flashcards.length > 0 && (
         <Box sx={{ mt: 4 }}>
           <Typography variant="h5">Flashcards Preview</Typography>
@@ -231,9 +248,17 @@ export default function Generate() {
             type="text"
             fullWidth
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              if (collectionNameError) setCollectionNameError(false)
+              setName(e.target.value)}}
             variant="outlined"
           ></TextField>
+          {collectionNameError && (
+            <Alert severity="error">Please enter a collection name.</Alert>
+          )}
+          {signedInError && (
+            <Alert severity="error"> Please sign in to save your flashcards.</Alert>
+          )}
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={saveFlashcards}>Save</Button>
