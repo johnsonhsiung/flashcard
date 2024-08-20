@@ -1,155 +1,114 @@
 "use client";
 
-import Image from "next/image";
-import getStripe from "@/utils/get-stripe";
 import {
   Button,
-  Toolbar,
   Typography,
   Container,
-  AppBar,
   Box,
   Grid,
+  Paper,
 } from "@mui/material";
-import Head from "next/head";
 import Link from "next/link";
-import HeaderBar from "@/components/HeaderBar";
 
 export default function Home() {
-  const handleSubmit = async () => {
-    const checkoutSession = await fetch("/api/checkout_session", {
-      method: "POST",
-      headers: {
-        origin: "http://localhost:3000",
-      },
-    });
-
-    const checkoutSessionJson = await checkoutSession.json();
-
-    if (checkoutSession.statusCode === 500) {
-      console.error(checkoutSession.message);
-    }
-
-    const stripe = await getStripe();
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    });
-
-    if (error) {
-      console.warn(error.message);
-    }
-  };
-
   return (
-    <Container maxWidth="100vw">
-      <Head>
-        <title>Flashcard</title>
-        <meta name="descrption" content="Create flashcards from your text" />
-      </Head>
-
-
-      <Box sx={{ textAlign: "center", my: 4 }}>
-        <Typography variant="h2" gutterBottom>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Box textAlign="center" mb={6}>
+        <Typography variant="h2" fontWeight="700" color="primary" gutterBottom>
           Welcome to Flashcard SaaS
         </Typography>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h6" color="textSecondary" paragraph>
           The easiest way to make flashcards from text
         </Typography>
-        <Link href="generate" passHref>
-          <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-            Get Started
-          </Button>
-        </Link>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          sx={{ mt: 2 }}
+        >
+          Get Started
+        </Button>
+      </Box>
 
-        <Grid container spaching={4}>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: 3, textAlign: "center" }}>
+            <Typography variant="h6" fontWeight="600">
               Smart Flashcards
             </Typography>
-            <Typography>
-              Our AI intelligently breaks down your text into concise
-              flashcards, perfect for studying.
+            <Typography variant="body2" color="textSecondary" paragraph>
+              Our AI intelligently breaks down your text into concise flashcards, perfect for studying.
             </Typography>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>
-              Accessible anywhere
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: 3, textAlign: "center" }}>
+            <Typography variant="h6" fontWeight="600">
+              Accessible Anywhere
             </Typography>
-            <Typography> Study on the go and be ready for any exam!</Typography>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="body2" color="textSecondary" paragraph>
+              Study on the go and be ready for any exam!
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={4}>
+          <Paper elevation={3} sx={{ padding: 3, textAlign: "center" }}>
+            <Typography variant="h6" fontWeight="600">
               Easy Text Input
             </Typography>
-            <Typography>
+            <Typography variant="body2" color="textSecondary" paragraph>
               Simply input your text and let our software do the rest!
             </Typography>
-          </Grid>
+          </Paper>
         </Grid>
-        <Box sx={{ my: 6, textAlign: "center" }}>
-          <Typography variant="h4" gutterBottom>
-            Pricing
-          </Typography>
-          <Grid container spacing={6}>
-            <Grid item xs={4} md={6}>
-              <Box
-                sx={{
-                  p: 3,
-                  border: "1px solid",
-                  borderColor: "grey.300",
-                  borderRadius: 2,
-                }}
-              >
-                {" "}
-                <Typography variant="h5" gutterBottom>
-                  Basic
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  $5 / month
-                </Typography>
-                <Typography gutterBottom>
-                  Access to flashcard features and limited storage
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmit}
-                >
-                  Select
-                </Button>
-              </Box>
-            </Grid>
-            <Grid item xs={4} md={6}>
-              <Box
-                sx={{
-                  p: 3,
-                  border: "1px solid",
-                  borderColor: "grey.300",
-                  borderRadius: 2,
-                }}
-              >
-                {" "}
-                <Typography variant="h5" gutterBottom>
-                  Pro
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  $5 / month
-                </Typography>
-                <Typography gutterBottom>
-                  Access to unlimited flashcard features and storage
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmit}
-                >
-                  Select
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
+      </Grid>
+
+      <Box textAlign="center" mt={8} mb={4}>
+        <Typography variant="h4" fontWeight="600" gutterBottom>
+          Pricing
+        </Typography>
+        <Typography variant="body1" color="textSecondary" paragraph>
+          Choose a plan that suits your needs
+        </Typography>
       </Box>
+
+      <Grid container spacing={4} justifyContent="center">
+        <Grid item xs={12} sm={5}>
+          <Paper elevation={3} sx={{ padding: 4, textAlign: "center" }}>
+            <Typography variant="h5" fontWeight="600">
+              Basic
+            </Typography>
+            <Typography variant="h6" color="primary" gutterBottom>
+              $5 / month
+            </Typography>
+            <Typography variant="body2" color="textSecondary" paragraph>
+              Access to flashcard features and limited storage
+            </Typography>
+            <Button variant="contained" color="secondary">
+              Select
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={5}>
+          <Paper elevation={3} sx={{ padding: 4, textAlign: "center" }}>
+            <Typography variant="h5" fontWeight="600">
+              Pro
+            </Typography>
+            <Typography variant="h6" color="primary" gutterBottom>
+              $5 / month
+            </Typography>
+            <Typography variant="body2" color="textSecondary" paragraph>
+              Access to unlimited flashcard features and storage
+            </Typography>
+            <Button variant="contained" color="secondary">
+              Select
+            </Button>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 }
