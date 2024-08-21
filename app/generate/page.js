@@ -57,10 +57,10 @@ export default function Generate() {
 
   const handleSubmit = async () => {
     if (!text.trim()) {
-      setPromptError(true)
-      return
+      setPromptError(true);
+      return;
     }
-    setLoading(true)
+    setLoading(true);
     fetch("api/generate", {
       method: "POST",
       body: text,
@@ -69,13 +69,12 @@ export default function Generate() {
       .then((data) => {
         if (data.error) {
           setEmptyFlashcardsError(true); 
-          console.log('empty flashcard')
+          console.log('empty flashcard');
         } else {
           setFlashcards(data);
-          setEmptyFlashcardsError(false)
+          setEmptyFlashcardsError(false);
         }
         setLoading(false);
-
       });
   };
 
@@ -89,8 +88,8 @@ export default function Generate() {
     setOpen(true);
   };
   const handleClose = () => {
-    setCollectionNameError(false)
-    setSignedInError(false)
+    setCollectionNameError(false);
+    setSignedInError(false);
     setOpen(false);
   };
   const handleSuccessOpen = () => {
@@ -112,7 +111,7 @@ export default function Generate() {
       setSignedInError(true);
       return;
     }
-    const trimmedName = name.trim() 
+    const trimmedName = name.trim();
     if (!trimmedName) {
       setCollectionNameError(true);
       return;
@@ -124,8 +123,8 @@ export default function Generate() {
     if (docSnap.exists()) {
       const collections = docSnap.data().flashcards || [];
 
-      if (collections.find((f) => f.name == trimmedName)) {
-        handleSameNameOpen()
+      if (collections.find((f) => f.name === trimmedName)) {
+        handleSameNameOpen();
         return; 
       } else {
         collections.push({ name: trimmedName });
@@ -144,7 +143,6 @@ export default function Generate() {
     await batch.commit();
     handleClose();
     handleSuccessOpen();    
-    //router.push("/flashcards");
   };
 
   return (
@@ -160,7 +158,16 @@ export default function Generate() {
       >
         <Typography variant="h4">Generate Flashcards</Typography>
 
-        <Paper sx={{ p: 4, width: "100%" }}>
+        <Paper 
+          elevation={4} 
+          sx={{ 
+            p: 4, 
+            width: "100%", 
+            backgroundColor: '#f5f5f5', 
+            borderRadius: 2,
+            boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+          }}
+        >
           <TextField
             value={text}
             onChange={(e) => {
@@ -173,7 +180,7 @@ export default function Generate() {
             multiline
             rows={4}
             variant="outlined"
-            sx={{ mb: 2 }}
+            sx={{ mb: 2, backgroundColor: '#fff', borderRadius: 1 }}
           ></TextField>
           {promptError && (
             <Alert severity="error" sx={{mb: 2}}>Please enter a prompt before generating.</Alert>
@@ -186,6 +193,7 @@ export default function Generate() {
             color="primary"
             onClick={handleSubmit}
             fullWidth
+            sx={{ backgroundColor: '#e57373', borderRadius: 2 }}
           >
             Submit
           </Button>
@@ -200,69 +208,59 @@ export default function Generate() {
           <Grid container spacing={3}>
             {flashcards.map((flashcard, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card>
+                <Card
+                  sx={{
+                    borderRadius: 2,
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                    transition: 'transform 0.3s ease-in-out',
+                    '&:hover': {
+                      transform: 'scale(1.02)',
+                    },
+                  }}
+                >
                   <CardActionArea
                     onClick={() => {
                       handleCardClick(index);
                     }}
                   >
-                    <CardContent>
-                      <Box
+                    <CardContent
+                      sx={{
+                        minHeight: '100px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        backgroundColor: '#fafafa',
+                      }}
+                    >
+                      <Typography 
+                        variant="h6" 
+                        component="div"
                         sx={{
-                          perspective: "1000px",
-                          "& > div": {
-                            transition: "transform 0.6s",
-                            transformStyle: "preserve-3d",
-                            position: "relative",
-                            width: "100%",
-                            height: "200px",
-                            boxShadow: "0 4px 8px 0 rgba(0,0,0, 0.2)",
-                            transform: flipped[index]
-                              ? "rotateY(180deg)"
-                              : "rotateY(0deg)",
-                          },
-                          "& > div > div": {
-                            position: "absolute",
-                            width: "100%",
-                            height: "100%",
-                            WebkitBackfaceVisibility: "hidden",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 2,
-                            boxSizing: "border-box",
-                          },
-                          "& > div > div:nth-of-type(2)": {
-                            transform: "rotateY(180deg)",
-                          },
+                          color: '#333',
+                          fontWeight: 'bold',
                         }}
                       >
-                        <div>
-                          <div>
-                            <Typography variant="h5" component="div">
-                              {flashcard.front}
-                            </Typography>
-                          </div>
-                          <div>
-                            <Typography variant="h5" component="div1">
-                              {flashcard.back}
-                            </Typography>
-                          </div>
-                        </div>
-                      </Box>
+                        {flashcard.front}
+                      </Typography>
                     </CardContent>
                   </CardActionArea>
                 </Card>
               </Grid>
             ))}
           </Grid>
-          <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-            <Button variant="contained" colors="secondary" onClick={handleOpen}>
-              Save
-            </Button>
-          </Box>
         </Box>
       )}
+      <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleOpen}
+          sx={{ backgroundColor: '#e57373' }}
+        >
+          Save
+        </Button>
+      </Box>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Save Flashcards</DialogTitle>
         <DialogContent>
@@ -277,16 +275,14 @@ export default function Generate() {
             fullWidth
             value={name}
             onChange={(e) => {
-              if (sameNameError) handleSameNameClose()
-              if (collectionNameError) setCollectionNameError(false)
+              if (sameNameError) handleSameNameClose();
+              if (collectionNameError) setCollectionNameError(false);
               setName(e.target.value);}}
             variant="outlined"
           ></TextField>
           {sameNameError && (
             <Alert severity="error">Duplicate name. Please choose a different name.</Alert>
-          )
-
-          }
+          )}
           {collectionNameError && (
             <Alert severity="error">Please enter a collection name.</Alert>
           )}

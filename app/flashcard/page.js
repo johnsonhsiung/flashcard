@@ -9,16 +9,8 @@ import {
   CardActionArea,
   CardContent,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Paper,
-  TextField,
   Typography,
   Box,
-  Button,
-  DialogTitle,
   Grid,
   Card,
 } from "@mui/material";
@@ -60,17 +52,28 @@ export default function FlashCard() {
   }
 
   return (
-    <Container maxWidth="100vw">
-      <Grid container spacing={3} sx={{ mt: 4 }}>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Grid container spacing={4}>
         {flashcards.map((flashcard, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card>
-              <CardActionArea
-                onClick={() => {
-                  handleCardClick(index);
-                }}
-              >
-                <CardContent>
+            <Card
+              sx={{
+                borderRadius: 3,
+                boxShadow: 3, // Adds a slight shadow to lift the card off the background
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)", // Slightly enlarges the card on hover
+                },
+              }}
+            >
+              <CardActionArea onClick={() => handleCardClick(index)}>
+                <CardContent
+                  sx={{
+                    padding: 3,
+                    backgroundColor: "#f9f9f9", // Light gray background to contrast the white text area
+                    borderRadius: 2,
+                  }}
+                >
                   <Box
                     sx={{
                       perspective: "1000px",
@@ -103,12 +106,20 @@ export default function FlashCard() {
                   >
                     <div>
                       <div>
-                        <Typography variant="h5" component="div">
+                        <Typography
+                          variant="h5"
+                          component="div"
+                          sx={{ color: "#333" }} // Darker text for better contrast
+                        >
                           {flashcard.front}
                         </Typography>
                       </div>
                       <div>
-                        <Typography variant="h5" component="div1">
+                        <Typography
+                          variant="h5"
+                          component="div1"
+                          sx={{ color: "#333" }} // Darker text for better contrast
+                        >
                           {flashcard.back}
                         </Typography>
                       </div>
