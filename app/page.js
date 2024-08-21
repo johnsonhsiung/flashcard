@@ -108,7 +108,13 @@ export default function Home() {
             </Typography>
             <Button
               variant="contained"
-              sx={{backgroundColor: 'gray'}}
+              disableRipple
+              sx={{
+                backgroundColor: 'gray',
+                "&:hover": {
+                  backgroundColor: "gray", // Remove hover background color
+                },
+              }}
               color='secondary'
             >
               Default
