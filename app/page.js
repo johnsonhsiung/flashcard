@@ -1,16 +1,32 @@
 "use client";
 
-import {
-  Button,
-  Typography,
-  Container,
-  Box,
-  Grid,
-  Paper,
-} from "@mui/material";
+import { Button, Typography, Container, Box, Grid, Paper } from "@mui/material";
 import Link from "next/link";
 
 export default function Home() {
+  const handleSubmit = async () => {
+    const checkoutSession = await fetch("/api/checkout_session", {
+      method: "POST",
+      headers: {
+        origin: "http://localhost:3000",
+      },
+    });
+
+    const checkoutSessionJson = await checkoutSession.json();
+
+    if (checkoutSession.statusCode === 500) {
+      console.error(checkoutSession.message);
+    }
+
+    const stripe = await getStripe();
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: checkoutSessionJson.id,
+    });
+
+    if (error) {
+      console.warn(error.message);
+    }
+  };
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Box textAlign="center" mb={6}>
@@ -20,14 +36,17 @@ export default function Home() {
         <Typography variant="h6" color="textSecondary" paragraph>
           The easiest way to make flashcards from text
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          sx={{ mt: 2 }}
-        >
-          Get Started
-        </Button>
+        <Link href="generate" passHref>
+          {" "}
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            sx={{ mt: 2 }}
+          >
+            Get Started
+          </Button>
+        </Link>
       </Box>
 
       <Grid container spacing={4}>
@@ -37,7 +56,8 @@ export default function Home() {
               Smart Flashcards
             </Typography>
             <Typography variant="body2" color="textSecondary" paragraph>
-              Our AI intelligently breaks down your text into concise flashcards, perfect for studying.
+              Our AI intelligently breaks down your text into concise
+              flashcards, perfect for studying.
             </Typography>
           </Paper>
         </Grid>
@@ -86,7 +106,11 @@ export default function Home() {
             <Typography variant="body2" color="textSecondary" paragraph>
               Access to flashcard features and limited storage
             </Typography>
-            <Button variant="contained" color="secondary">
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="secondary"
+            >
               Select
             </Button>
           </Paper>
@@ -98,12 +122,16 @@ export default function Home() {
               Pro
             </Typography>
             <Typography variant="h6" color="primary" gutterBottom>
-              $5 / month
+              $10 / month
             </Typography>
             <Typography variant="body2" color="textSecondary" paragraph>
               Access to unlimited flashcard features and storage
             </Typography>
-            <Button variant="contained" color="secondary">
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="secondary"
+            >
               Select
             </Button>
           </Paper>
