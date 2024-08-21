@@ -2,6 +2,7 @@
 
 import { Button, Typography, Container, Box, Grid, Paper } from "@mui/material";
 import Link from "next/link";
+import getStripe from "@/utils/get-stripe";
 
 export default function Home() {
   const handleSubmit = async () => {
@@ -31,10 +32,10 @@ export default function Home() {
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Box textAlign="center" mb={6}>
         <Typography variant="h2" fontWeight="700" color="primary" gutterBottom>
-          Welcome to Flashcard SaaS
+          Welcome to FlashBrain
         </Typography>
         <Typography variant="h6" color="textSecondary" paragraph>
-          The easiest way to make flashcards from text
+          The easiest way to make flashcards from text!
         </Typography>
         <Link href="generate" passHref>
           {" "}
@@ -56,8 +57,7 @@ export default function Home() {
               Smart Flashcards
             </Typography>
             <Typography variant="body2" color="textSecondary" paragraph>
-              Our AI intelligently breaks down your text into concise
-              flashcards, perfect for studying.
+              Our AI intelligently generates flashcards with a simple prompt!
             </Typography>
           </Paper>
         </Grid>
@@ -101,17 +101,17 @@ export default function Home() {
               Basic
             </Typography>
             <Typography variant="h6" color="primary" gutterBottom>
-              $5 / month
+              Free
             </Typography>
             <Typography variant="body2" color="textSecondary" paragraph>
               Access to flashcard features and limited storage
             </Typography>
             <Button
-              onClick={handleSubmit}
               variant="contained"
-              color="secondary"
+              sx={{backgroundColor: 'gray'}}
+              color='secondary'
             >
-              Select
+              Default
             </Button>
           </Paper>
         </Grid>
