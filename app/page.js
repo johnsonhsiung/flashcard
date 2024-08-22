@@ -3,6 +3,8 @@
 import { Button, Typography, Container, Box, Grid, Paper } from "@mui/material";
 import Link from "next/link";
 import getStripe from "@/utils/get-stripe";
+import { analytics } from "@/firebase";
+import { useEffect } from "react";
 
 export default function Home() {
   const handleSubmit = async () => {
@@ -28,6 +30,7 @@ export default function Home() {
       console.warn(error.message);
     }
   };
+
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Box textAlign="center" mb={6}>
